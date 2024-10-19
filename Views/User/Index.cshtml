@@ -1,0 +1,62 @@
+﻿@model IEnumerable<AlgoBotBackend.Migrations.DAL.BotUser>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Все пользователи</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Юзернейм
+            </th>
+            <th>
+                Юзернейм реферала
+            </th>
+            <th>
+                Имя
+            </th>
+            <th>
+                Номер телефона
+            </th>
+            <th>
+                Возраст ребёнка
+            </th>
+            <th>
+                Имя ребёнка
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Username)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReferalUsername)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Firstname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ChildAge)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ChildName)
+                </td>
+                <td>|
+                    <a asp-action="Details" asp-route-id="@item.Username">Подробнее</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Username">Удалить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
