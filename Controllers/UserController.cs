@@ -23,7 +23,7 @@ namespace AlgoBotBackend.Controllers
             return View(await _db.Users.ToListAsync());
         }
 
-        [HttpGet("/User/Details/{username}")]
+        [HttpGet("/user/details/{username}")]
         public async Task<IActionResult> Details(string username)
         {
             if (username == null) return NotFound();
@@ -36,6 +36,16 @@ namespace AlgoBotBackend.Controllers
         public async Task<IActionResult> GetAllUsers()
         {
             return Ok(await _db.Users.ToListAsync());
+        }
+        [HttpPost("/user/{username}/score")]
+        public async Task<IActionResult> EditUserScore(string username, int score)
+        {
+            if (username == null) return NotFound();
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null) return NotFound();
+            user.Score += score;
+            _db.Users.Update(user);
+            return Ok(user);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

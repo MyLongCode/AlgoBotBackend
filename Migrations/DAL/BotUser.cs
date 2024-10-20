@@ -12,5 +12,6 @@ namespace AlgoBotBackend.Migrations.DAL
         public string ChildAge { get; set; } = null!;
         public string ChildName { get; set; } = null!;
         public int StageReg { get; set; }
+        public int Score { get; set; }
     }
 }
