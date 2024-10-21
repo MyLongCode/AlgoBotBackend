@@ -27,7 +27,12 @@
             <th>
                 Имя ребёнка
             </th>
-            <th></th>
+            <th>
+
+            </th>
+            <th>
+
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -52,9 +57,16 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.ChildName)
                 </td>
-                <td>|
-                    <a asp-action="Details" asp-route-id="@item.Username">Подробнее</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Username">Удалить</a>
+                <td>
+                    <form asp-controller="user" asp-action="details" asp-antiforgery="false" method="get" asp-route-username="@item.Username">
+                        <input type="submit" value="Подробнее" class="btn btn-outline-primary btn-sm" />
+                    </form>
+   
+                </td>
+                <td>
+                    <form asp-controller="user" asp-action="edit" asp-antiforgery="false" method="get" asp-route-username="@item.Username">
+                        <input type="submit" value="Редактировать" class="btn btn-outline-secondary btn-sm" />
+                    </form>
                 </td>
             </tr>
         }

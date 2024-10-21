@@ -4,8 +4,6 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Подробнее:</h1>
-
 <div>
     <h4>Пользователь @Model.Username</h4>
     <hr />
@@ -49,5 +47,7 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Index">Вернуться к списку пользователей</a>
+    <form asp-controller="user" asp-action="Index" asp-antiforgery="false" method="get">
+        <input type="submit" value="Вернуться к списку пользователей" class="btn btn-outline-secondary btn-sm" />
+    </form>
 </div>

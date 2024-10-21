@@ -1,0 +1,34 @@
+﻿@model AlgoBotBackend.Migrations.DAL.BotUser
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>@Model.Username</h1>
+<h2>@Model.Firstname</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <h4>Текущий счёт: @Model.Score</h4>
+        <form asp-action="edit" method="post" asp-route-username="@Model.Username">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="Score" class="form-control" value="0"/>
+                <span asp-validation-for="Score" class="text-danger"></span>
+            </div>
+	        <div class="form-group">
+                <input type="submit" value="Добавить" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<br />
+<div>
+    <form asp-controller="user" asp-action="Index" asp-antiforgery="false" method="get">
+        <input type="submit" value="Вернуться к списку пользователей" class="btn btn-outline-secondary btn-sm" />
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
