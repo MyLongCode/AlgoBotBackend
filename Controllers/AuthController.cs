@@ -19,10 +19,15 @@ namespace AlgoBotBackend.Controllers
             _db = db;
         }
 
-        [HttpPost("/token")]
-        public IActionResult Token(string username, string password)
+        public IActionResult Login()
         {
-            var identity = GetIdentity(username, password);
+            return View();
+        }
+
+        [HttpPost("/token")]
+        public IActionResult Token(AuthViewModel dto)
+        {
+            var identity = GetIdentity(dto.Login, dto.Password);
             if (identity == null)
             {
                 return BadRequest(new { errorText = "Invalid username or password." });
@@ -43,7 +48,7 @@ namespace AlgoBotBackend.Controllers
                 access_token = encodedJwt,
                 username = identity.Name
             };
-            return Json(response);
+            return RedirectToRoute("/firm/index");
         }
 
         private ClaimsIdentity GetIdentity(string username, string password)
