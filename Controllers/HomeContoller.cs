@@ -21,12 +21,12 @@ namespace AlgoBotBackend.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Users.ToListAsync());
+            return View(await _context.BotUsers.ToListAsync());
         }
 
         private bool BotUserExists(string id)
         {
-            return _context.Users.Any(e => e.Username == id);
+            return _context.BotUsers.Any(e => e.Username == id);
         }
     }
 }

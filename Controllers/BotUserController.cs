@@ -7,12 +7,12 @@ using System.Web.Http.Routing;
 
 namespace AlgoBotBackend.Controllers
 {
-    public class UserController : Controller
+    public class BotUserController : Controller
     {
         private readonly DBContext _db;
-        private readonly ILogger<UserController> _logger;
+        private readonly ILogger<BotUserController> _logger;
 
-        public UserController(ILogger<UserController> logger, DBContext db)
+        public BotUserController(ILogger<BotUserController> logger, DBContext db)
         {
             _logger = logger;
             _db = db;
@@ -20,14 +20,14 @@ namespace AlgoBotBackend.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _db.Users.ToListAsync());
+            return View(await _db.BotUsers.ToListAsync());
         }
 
         [HttpGet("/user/{username}/details")]
         public async Task<IActionResult> Details(string username)
         {
             if (username == null) return NotFound();
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
+            var user = await _db.BotUsers.FirstOrDefaultAsync(u => u.Username == username);
             if (user == null) return NotFound();
             return View(user);
         }
@@ -35,14 +35,14 @@ namespace AlgoBotBackend.Controllers
         [HttpGet("/user")]
         public async Task<IActionResult> GetAllUsers()
         {
-            return Ok(await _db.Users.ToListAsync());
+            return Ok(await _db.BotUsers.ToListAsync());
         }
 
         [HttpGet("/user/{username}/edit")]
         public async Task<IActionResult> Edit(string username)
         {
             if (username == null) return NotFound();
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
+            var user = await _db.BotUsers.FirstOrDefaultAsync(u => u.Username == username);
             if (user == null) return NotFound();
             return View(user);
         }
@@ -51,10 +51,10 @@ namespace AlgoBotBackend.Controllers
         public async Task<IActionResult> Edit(string username, int score)
         {
             if (username == null) return NotFound();
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
+            var user = await _db.BotUsers.FirstOrDefaultAsync(u => u.Username == username);
             if (user == null) return NotFound();
             user.Score += score;
-            _db.Users.Update(user);
+            _db.BotUsers.Update(user);
             await _db.SaveChangesAsync();
             return View("Edit", user);
         }
