@@ -19,14 +19,9 @@ namespace AlgoBotBackend.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.BotUsers.ToListAsync());
-        }
-
-        private bool BotUserExists(string id)
-        {
-            return _context.BotUsers.Any(e => e.Username == id);
+            return View();
         }
     }
 }

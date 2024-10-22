@@ -1,0 +1,47 @@
+﻿@model IEnumerable<AlgoBotBackend.Migrations.DAL.Firm>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Все фирмы</h1>
+<h4>Количество: @Model.Count()</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Название
+            </th>
+            <th>
+
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <form asp-controller="firm" asp-action="details" asp-antiforgery="false" method="get" asp-route-id="@item.Id">
+                        <input type="submit" value="Подробнее" class="btn btn-outline-primary btn-sm" />
+                    </form>
+                </td>
+                <td>
+                    <form asp-controller="firm" asp-action="edit" asp-antiforgery="false" method="get" asp-route-id="@item.Id">
+                        <input type="submit" value="Редактировать" class="btn btn-outline-secondary btn-sm" />
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<form asp-controller="firm" asp-action="create" asp-antiforgery="false" method="get">
+    <input type="submit" value="Добавить фирму" class="btn btn btn-success btn-lg" />
+</form>

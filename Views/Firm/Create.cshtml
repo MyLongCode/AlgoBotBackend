@@ -1,0 +1,39 @@
+﻿@using AlgoBotBackend.Migrations.DAL
+@model Firm
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>BotUser</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <label asp-for="DefaultReferalSystem"/>Реферальная система по умолчанию<br />
+            <select asp-for="DefaultReferalSystem" id="country" asp-items="Html.GetEnumSelectList<ReferalSystem>()"></select>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <form asp-controller="firm" asp-action="index" asp-antiforgery="false" method="get">
+        <input type="submit" value="Вернуться к списку фирм" class="btn btn-outline-secondary btn-sm" />
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
