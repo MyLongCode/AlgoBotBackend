@@ -23,6 +23,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                             IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
                             ValidateIssuerSigningKey = true,
                         };
+                        options.Events = new JwtBearerEvents
+                        {
+                            OnMessageReceived = context =>
+                            {
+                                if (context.Request.Query.ContainsKey("accessToken"))
+                                {
+                                    context.Token = context.Request.Query["accessToken"];
+                                }
+
+                                return Task.CompletedTask;
+                            }
+                        };
                     });
 builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString("DB");
@@ -49,9 +61,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication();
-app.UseAuthorization();
 
+app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapControllerRoute(
     name: "default",

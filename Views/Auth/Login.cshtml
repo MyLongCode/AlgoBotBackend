@@ -1,21 +1,56 @@
 ﻿@model AuthViewModel
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="token" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Login" class="control-label"></label>
-                <input asp-for="Login" class="form-control" />
-                <span asp-validation-for="Login" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Login" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        <div id="loginForm">
+            <h3>Вход на сайт</h3>
+            <label>Логин</label><br />
+            <input type="text" id="login" /> <br /><br />
+            <label>Пароль</label><br />
+            <input type="password" id="password" /><br /><br />
+            <input type="submit" id="submitLogin" value="Логин" />
+        </div>
     </div>
 </div>
+
+@section Scripts {
+
+    <script>
+        var tokenKey = "accessToken";
+
+        async function getTokenAsync() {
+
+            // получаем данные формы и фомируем объект для отправки
+            const formData = new FormData();
+            formData.append("grant_type", "password");
+            formData.append("login", document.getElementById("login").value);
+            formData.append("password", document.getElementById("password").value);
+
+            // отправляет запрос и получаем ответ
+            const response = await fetch("/token", {
+                method: "POST",
+                headers: { "Accept": "application/json" },
+                body: formData
+            });
+            // получаем данные
+            const data = await response.json();
+
+            // если запрос прошел нормально
+            if (response.ok === true) {
+                // сохраняем в хранилище sessionStorage токен доступа
+                sessionStorage.setItem(tokenKey, data.access_token);
+                console.log(data.access_token);
+            }
+            else {
+                // если произошла ошибка, из errorText получаем текст ошибки
+                console.log("Error: ", response.status, data.errorText);
+            }
+        };
+
+        // получаем токен
+        document.getElementById("submitLogin").addEventListener("click", e => {
+
+            e.preventDefault();
+            getTokenAsync();
+        });
+    </script>
+}

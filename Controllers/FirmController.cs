@@ -1,11 +1,11 @@
 ﻿using AlgoBotBackend.Migrations.EF;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlgoBotBackend.Controllers
 {
-    [Authorize]
     public class FirmController : Controller
 	{
 		private readonly DBContext _db;
@@ -21,6 +21,12 @@ namespace AlgoBotBackend.Controllers
 		{
 			return View(await _db.Firms.ToListAsync());
 		}
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet("/firm")]
+        public async Task<ActionResult> GetAllFirms()
+        {
+            return Ok(await _db.Firms.ToListAsync());
+        }
 
         public async Task<IActionResult> Create()
         {

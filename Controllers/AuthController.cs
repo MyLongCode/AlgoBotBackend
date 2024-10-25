@@ -5,6 +5,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System;
 using AlgoBotBackend.Migrations.EF;
+using NuGet.Common;
+using Newtonsoft.Json.Linq;
 
 namespace AlgoBotBackend.Controllers
 {
@@ -48,7 +50,7 @@ namespace AlgoBotBackend.Controllers
                 access_token = encodedJwt,
                 username = identity.Name
             };
-            return RedirectToRoute("/firm/index");
+            return Ok(response);
         }
 
         private ClaimsIdentity GetIdentity(string username, string password)
