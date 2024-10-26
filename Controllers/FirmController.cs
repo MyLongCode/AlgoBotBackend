@@ -9,23 +9,31 @@ using System.Security.Claims;
 
 namespace AlgoBotBackend.Controllers
 {
-    [Authorize]
+	[Authorize]
     public class FirmController : Controller
 	{
 		private readonly DBContext _db;
-		private readonly ILogger<BotUserController> _logger;
+		private readonly ILogger<FirmController> _logger;
 
-		public FirmController(ILogger<BotUserController> logger, DBContext db)
+		public FirmController(ILogger<FirmController> logger, DBContext db)
 		{
 			_logger = logger;
 			_db = db;
 		}
-
         public async Task<ActionResult> Index()
 		{
 			return View(await _db.Firms.ToListAsync());
 		}
-        
+
+        [HttpGet("/firm/{id}/details")]
+        public async Task<IActionResult> Details(int id)
+        {
+            if (id == null) return NotFound();
+            var firm = await _db.Firms.Include(f => f.Owner).FirstOrDefaultAsync(u => u.Id == id);
+            if (firm == null) return NotFound();
+            return View(firm);
+        }
+
         [HttpGet("/firm")]
         public async Task<ActionResult> GetAllFirms()
         {
@@ -38,14 +46,18 @@ namespace AlgoBotBackend.Controllers
         }
 
 		[HttpPost("/firm/create")]
-		public async Task<IActionResult> Create(CreateFirmModel dto)
+		public async Task<IActionResult> CreateFirm(CreateFirmModel dto)
 		{
+			var owner = _db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
 			var firm = new Firm()
 			{
-				Owner = _db.Users.FirstOrDefault(u => u.Login == ),
+				OwnerId = owner.Id,
+				Owner = owner,
 				Name = dto.Name,
-				DefaultReferalSystem = dto.DefaultReferalSystem
 			};
+			await _db.Firms.AddAsync(firm);
+			await _db.SaveChangesAsync();
+			return RedirectToAction("Index");
 		}
 	}
 }

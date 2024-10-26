@@ -15,7 +15,8 @@ builder.Services.AddDbContext<DBContext>(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => //CookieAuthenticationOptions
                 {
-                    options.LoginPath = new PathString("/Account/Login");
+                    options.LoginPath = new PathString("/Auth/Login");
+                    options.AccessDeniedPath = new PathString("/Auth/Denied");
                 });
 
 builder.Services.AddSwaggerGen(options =>

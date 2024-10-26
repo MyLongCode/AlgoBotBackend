@@ -25,6 +25,11 @@ namespace AlgoBotBackend.Controllers
             return View();
         }
 
+        public IActionResult Denied()
+        {
+            return View();
+        }
+
         [HttpPost("/login")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(AuthViewModel dto
@@ -35,21 +40,22 @@ namespace AlgoBotBackend.Controllers
                 var user = _db.Users.FirstOrDefault(u => u.Login== dto.Login && u.Password == dto.Password);
                 if (user != null)
                 {
-                    await Authenticate(dto.Login); // аутентификация
+                    await Authenticate(dto.Login, user.Role); // аутентификация
 
-                    return RedirectToAction("index", "user");
+                    return RedirectToAction("index", "firm");
                 }
                 ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }
             return View(dto);
         }
 
-        private async Task Authenticate(string userName)
+        private async Task Authenticate(string userName, string role)
         {
             // создаем один claim
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, role)
             };
             // создаем объект ClaimsIdentity
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);

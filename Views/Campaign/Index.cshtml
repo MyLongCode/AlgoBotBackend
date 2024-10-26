@@ -1,0 +1,68 @@
+﻿@model IEnumerable<AlgoBotBackend.Migrations.DAL.AdvertisingСampaign>
+
+@{
+    ViewData["Title"] = "Рекламные кампании";
+}
+
+<h1>Все кампании</h1>
+<h4>Количество: @Model.Count()</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Название
+            </th>
+            <th>
+                Фирма
+            </th>
+            <th>
+                Реферальная система
+            </th>
+            <th>
+                Кешбек:
+            </th>
+            <th>
+
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.Firm.Name
+                </td>
+                <td>
+                    @item.ReferalSystem
+                </td>
+                <td>
+                    @if (item.Score == null) 
+                    {
+                        @:<p>@item.ProcentScore %</p>
+                    }
+                    @if (item.ProcentScore == null) 
+                    {
+                        @:<p>@item.Score рублей</p>
+                    }
+                </td>
+                <td>
+                    <form asp-controller="firm" asp-action="details" asp-antiforgery="false" method="get" asp-route-id="@item.Id">
+                        <input type="submit" value="Подробнее" class="btn btn-outline-primary btn-sm" />
+                    </form>
+                </td>
+                <td>
+                    <form asp-controller="firm" asp-action="edit" asp-antiforgery="false" method="get" asp-route-id="@item.Id">
+                        <input type="submit" value="Редактировать" class="btn btn-outline-secondary btn-sm" />
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

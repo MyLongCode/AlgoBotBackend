@@ -1,0 +1,28 @@
+﻿@using AlgoBotBackend.Migrations.DAL
+@model Firm
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div>
+    <h4>@Model.Name</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Создатель:
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.Owner.FullName
+        </dd>
+    </dl>
+    <form asp-controller="campaign" asp-action="create" asp-antiforgery="false" asp-route-firmId="@Model.Id" method="get">
+        <input type="submit" value="Создать рекламную кампанию" class="btn btn-success btn-sm" />
+    </form>
+</div>
+<br />
+<div>
+    <form asp-controller="user" asp-action="Index" asp-antiforgery="false" method="get">
+        <input type="submit" value="Вернуться к списку пользователей" class="btn btn-secondary btn-sm" />
+    </form>
+</div>

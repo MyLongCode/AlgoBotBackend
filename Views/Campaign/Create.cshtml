@@ -1,0 +1,50 @@
+﻿@using AlgoBotBackend.Migrations.DAL
+@model CreateCampaignViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Создать рекламную кампанию</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateCampaign">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="FirmId" class="form-control" value="@Model.FirmId" hidden/>
+                <label asp-for="Name" class="control-label">Название</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <label asp-for="ReferalSystem"/>Реферальная система <br />
+            <select asp-for="ReferalSystem" class="form-select" asp-items="Html.GetEnumSelectList<ReferalSystem>()"></select>
+
+            <label asp-for="ScoreType">Система кешбека</label> <br />
+            <select asp-for="ScoreType" id="scoreType" class="form-select" onchange="myFunction(event)" asp-items="Html.GetEnumSelectList<ScoreType>()"></select>
+            <label asp-for="Summ" id="summ">Сумма</label> <br />
+            <input asp-for="Summ" type="number" class="form-control"></input>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Создать" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<br />
+<div>
+    <form asp-controller="firm" asp-action="index" asp-antiforgery="false" method="get">
+        <input type="submit" value="Вернуться к списку фирм" class="btn btn-outline-secondary btn-sm" />
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function myFunction(e) {
+            document.getElementById("summ").innerText = e.target.innerText.split("\n")[e.target.value];
+        }
+    </script>
+    
+}
