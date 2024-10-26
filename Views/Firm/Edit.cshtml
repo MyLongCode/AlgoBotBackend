@@ -1,0 +1,33 @@
+﻿@model EditFirmViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>@Model.Name</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="editfirm" method="post">
+            <input asp-for="FirmId" class="form-control" value="@Model.FirmId" hidden />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="Name" class="form-control"/>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+	        <div class="form-group">
+                <input type="submit" value="Изменить" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<br />
+<div>
+    <form asp-controller="firm" asp-action="Index" asp-antiforgery="false" method="get">
+        <input type="submit" value="Вернуться к списку фирм" class="btn btn-outline-secondary btn-sm" />
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

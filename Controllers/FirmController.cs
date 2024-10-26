@@ -22,7 +22,9 @@ namespace AlgoBotBackend.Controllers
 		}
         public async Task<ActionResult> Index()
 		{
-			return View(await _db.Firms.ToListAsync());
+            var firms = await _db.Firms.Include(f => f.Owner).OrderBy(x => x.Name).ToListAsync();
+            if (!User.IsInRole("admin")) firms = firms.Where(f => f.Owner.Login == User.Identity.Name).ToList();
+			return View(firms);
 		}
 
         [HttpGet("/firm/{id}/details")]
@@ -32,6 +34,26 @@ namespace AlgoBotBackend.Controllers
             var firm = await _db.Firms.Include(f => f.Owner).FirstOrDefaultAsync(u => u.Id == id);
             if (firm == null) return NotFound();
             return View(firm);
+        }
+
+        [HttpGet("/firm/{id}/edit")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            if (id == null) return NotFound();
+            var firm = await _db.Firms.FirstOrDefaultAsync(u => u.Id == id);
+            if (firm == null) return NotFound();
+            var viewmodel = new EditFirmViewModel() { Name = firm.Name, FirmId = id };
+            return View(viewmodel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditFirm(EditFirmViewModel dto)
+        {
+            var firm = await _db.Firms.Include(f => f.Owner).FirstOrDefaultAsync(f => f.Id == dto.FirmId);
+            firm.Name = dto.Name;
+			_db.Firms.Update(firm);
+			_db.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         [HttpGet("/firm")]
