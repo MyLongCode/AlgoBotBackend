@@ -1,12 +1,11 @@
 ﻿using AlgoBotBackend.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System;
 using AlgoBotBackend.Migrations.EF;
-using NuGet.Common;
-using Newtonsoft.Json.Linq;
+using AlgoBotBackend.Migrations.DAL;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace AlgoBotBackend.Controllers
 {
@@ -26,51 +25,37 @@ namespace AlgoBotBackend.Controllers
             return View();
         }
 
-        [HttpPost("/token")]
-        public IActionResult Token(AuthViewModel dto)
+        [HttpPost("/login")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(AuthViewModel dto
+            )
         {
-            var identity = GetIdentity(dto.Login, dto.Password);
-            if (identity == null)
+            if (ModelState.IsValid)
             {
-                return BadRequest(new { errorText = "Invalid username or password." });
-            }
-
-            var now = DateTime.UtcNow;
-            var jwt = new JwtSecurityToken(
-                    issuer: AuthOptions.ISSUER,
-                    audience: AuthOptions.AUDIENCE,
-                    notBefore: now,
-                    claims: identity.Claims,
-                    expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
-                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-
-            var response = new
-            {
-                access_token = encodedJwt,
-                username = identity.Name
-            };
-            return Ok(response);
-        }
-
-        private ClaimsIdentity GetIdentity(string username, string password)
-        {
-            var User = _db.Users.FirstOrDefault(x => x.Login == username && x.Password == password);
-            if (User != null)
-            {
-                var claims = new List<Claim>
+                var user = _db.Users.FirstOrDefault(u => u.Login== dto.Login && u.Password == dto.Password);
+                if (user != null)
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, User.Login),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, User.Role)
-                };
-                ClaimsIdentity claimsIdentity =
-                new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
-                    ClaimsIdentity.DefaultRoleClaimType);
-                return claimsIdentity;
-            }
+                    await Authenticate(dto.Login); // аутентификация
 
-            // если пользователя не найдено
-            return null;
+                    return RedirectToAction("index", "user");
+                }
+                ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+            }
+            return View(dto);
         }
+
+        private async Task Authenticate(string userName)
+        {
+            // создаем один claim
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
+            };
+            // создаем объект ClaimsIdentity
+            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+            // установка аутентификационных куки
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+        }
+
     }
 }

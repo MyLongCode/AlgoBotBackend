@@ -20,7 +20,6 @@ namespace AlgoBotBackend.Migrations.EF
             : base(options)
         {
 			AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-			Database.EnsureCreated();
 		}
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

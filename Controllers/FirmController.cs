@@ -1,11 +1,15 @@
-﻿using AlgoBotBackend.Migrations.EF;
+﻿using AlgoBotBackend.Migrations.DAL;
+using AlgoBotBackend.Migrations.EF;
+using AlgoBotBackend.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace AlgoBotBackend.Controllers
 {
+    [Authorize]
     public class FirmController : Controller
 	{
 		private readonly DBContext _db;
@@ -17,11 +21,11 @@ namespace AlgoBotBackend.Controllers
 			_db = db;
 		}
 
-		public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index()
 		{
 			return View(await _db.Firms.ToListAsync());
 		}
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        
         [HttpGet("/firm")]
         public async Task<ActionResult> GetAllFirms()
         {
@@ -33,10 +37,15 @@ namespace AlgoBotBackend.Controllers
             return View();
         }
 
-		//[HttpPost("/firm/create")]
-		//public async Task<IActionResult> Create()
-		//{
-
-		//}
-    }
+		[HttpPost("/firm/create")]
+		public async Task<IActionResult> Create(CreateFirmModel dto)
+		{
+			var firm = new Firm()
+			{
+				Owner = _db.Users.FirstOrDefault(u => u.Login == ),
+				Name = dto.Name,
+				DefaultReferalSystem = dto.DefaultReferalSystem
+			};
+		}
+	}
 }

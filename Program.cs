@@ -1,45 +1,22 @@
 using AlgoBotBackend.Migrations.EF;
-using AlgoBotBackend.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(options =>
-                    {
-                        options.RequireHttpsMetadata = false;
-                        options.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            ValidateIssuer = true,
-                            ValidIssuer = AuthOptions.ISSUER,
-                            ValidateAudience = true,
-                            ValidAudience = AuthOptions.AUDIENCE,
-                            ValidateLifetime = true,
-                            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                            ValidateIssuerSigningKey = true,
-                        };
-                        options.Events = new JwtBearerEvents
-                        {
-                            OnMessageReceived = context =>
-                            {
-                                if (context.Request.Query.ContainsKey("accessToken"))
-                                {
-                                    context.Token = context.Request.Query["accessToken"];
-                                }
 
-                                return Task.CompletedTask;
-                            }
-                        };
-                    });
 builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString("DB");
 builder.Services.AddDbContext<DBContext>(options =>
     options.UseNpgsql(connectionString));
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options => //CookieAuthenticationOptions
+                {
+                    options.LoginPath = new PathString("/Account/Login");
+                });
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -61,9 +38,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-
+app.UseAuthentication();    // подключение аутентификации
 app.UseAuthorization();
-app.UseAuthentication();
+
 
 app.MapControllerRoute(
     name: "default",

@@ -1,12 +1,13 @@
 using AlgoBotBackend.Migrations.EF;
 using AlgoBotBackend.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
-using System.Web.Http.Routing;
-
 namespace AlgoBotBackend.Controllers
 {
+    [Authorize]
     public class BotUserController : Controller
     {
         private readonly DBContext _db;
@@ -17,7 +18,8 @@ namespace AlgoBotBackend.Controllers
             _logger = logger;
             _db = db;
         }
-
+        
+        [HttpGet("/user/index")]
         public async Task<IActionResult> Index()
         {
             return View(await _db.BotUsers.ToListAsync());
