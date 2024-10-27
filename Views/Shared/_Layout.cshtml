@@ -29,6 +29,24 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="BotUser" asp-action="Index">Пользователи бота</a>
                         </li>
                     </ul>
+                    <ul class="navbar-nav flex-grow-2">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <form class="nav-link" asp-controller="auth" asp-action="logout" asp-antiforgery="false" method="post">
+                                    <input type="submit" value="Выход" class="btn btn-outline-dark btn-sm" />
+                                </form>
+                            </li> 
+                        }
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <form class="nav-link" asp-controller="auth" asp-action="login" asp-antiforgery="false" method="post">
+                                    <input type="submit" value="Войти" class="btn btn-outline-dark btn-sm" />
+                                </form>
+                            </li>
+                        }
+                    </ul>
                 </div>
             </div>
         </nav>

@@ -32,8 +32,7 @@ namespace AlgoBotBackend.Controllers
 
         [HttpPost("/login")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(AuthViewModel dto
-            )
+        public async Task<IActionResult> GetLogin(AuthViewModel dto)
         {
             if (ModelState.IsValid)
             {
@@ -42,7 +41,7 @@ namespace AlgoBotBackend.Controllers
                 {
                     await Authenticate(dto.Login, user.Role); // аутентификация
 
-                    return RedirectToAction("index", "firm");
+                    return RedirectToAction("Index", "Campaign");
                 }
                 ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }
@@ -61,6 +60,12 @@ namespace AlgoBotBackend.Controllers
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
             // установка аутентификационных куки
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
         }
 
     }

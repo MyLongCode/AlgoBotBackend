@@ -10,11 +10,11 @@ using AlgoBotBackend.Migrations.EF;
 
 namespace AlgoBotBackend.Controllers
 {
-    public class HomeContoller : Controller
+    public class HomeController : Controller
     {
         private readonly DBContext _context;
 
-        public HomeContoller(DBContext context)
+        public HomeController(DBContext context)
         {
             _context = context;
         }

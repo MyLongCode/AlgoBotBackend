@@ -20,6 +20,7 @@ namespace AlgoBotBackend.Controllers
 			_logger = logger;
 			_db = db;
 		}
+
         public async Task<ActionResult> Index()
 		{
             var firms = await _db.Firms.Include(f => f.Owner).OrderBy(x => x.Name).ToListAsync();

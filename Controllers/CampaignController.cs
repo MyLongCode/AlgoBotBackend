@@ -1,11 +1,13 @@
 ﻿using AlgoBotBackend.Migrations.DAL;
 using AlgoBotBackend.Migrations.EF;
 using AlgoBotBackend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlgoBotBackend.Controllers
 {
+    [Authorize]
     public class CampaignController : Controller
     {
         private readonly DBContext _db;
@@ -18,7 +20,10 @@ namespace AlgoBotBackend.Controllers
         }
         public async Task<ActionResult> Index()
         {
-            return View(await _db.AdvertisingСampaigns.Include(c => c.Firm).ToListAsync());
+            var campaigns = await _db.AdvertisingСampaigns.Include(c => c.Firm).ToListAsync();
+            var authUser = _db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            if (!User.IsInRole("admin")) campaigns = campaigns.Where(c => c.Firm.OwnerId == authUser.Id).ToList();
+            return View(campaigns);
         }
 
         [HttpGet("/campaign/{id}/details")]
