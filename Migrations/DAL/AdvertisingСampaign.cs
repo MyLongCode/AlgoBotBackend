@@ -7,6 +7,7 @@
 		public int FirmId { get; set; }
 		public Firm Firm { get; set; }
 		public ReferalSystem ReferalSystem { get; set; }
+		public string Distribution { get; set; }
 		public int? ProcentScore { get; set; }
 		public int? Score { get; set; }
 	}

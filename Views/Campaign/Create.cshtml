@@ -20,12 +20,19 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <label asp-for="ReferalSystem"/>Реферальная система <br />
-            <select asp-for="ReferalSystem" class="form-select" asp-items="Html.GetEnumSelectList<ReferalSystem>()"></select>
+            <select asp-for="ReferalSystem" class="form-select" onChange="ProcentFunc(event)" asp-items="Html.GetEnumSelectList<ReferalSystem>()"></select>
+            
+                
+            <label asp-for="Distribution" id="procentLabel">Распределение</label>
+            <select asp-for="Distribution" id="procentSelect" class="form-select">
+
+            </select>
+
 
             <label asp-for="ScoreType">Система кешбека</label> <br />
             <select asp-for="ScoreType" id="scoreType" class="form-select" onchange="myFunction(event)" asp-items="Html.GetEnumSelectList<ScoreType>()"></select>
             <label asp-for="Summ" id="summ">Сумма</label> <br />
-            <input asp-for="Summ" type="number" class="form-control"></input>
+            <input asp-for="Summ" type="number" class="form-control"/>
             <br />
             <div class="form-group">
                 <input type="submit" value="Создать" class="btn btn-primary" />
@@ -43,8 +50,69 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
+        var label = document.getElementById("procentLabel");
+        var select = document.getElementById("procentSelect");
+        label.style.display = 'none';
+        select.style.display = 'none';
         function myFunction(e) {
             document.getElementById("summ").innerText = e.target.innerText.split("\n")[e.target.value];
+        }
+        function ProcentFunc(e){
+            
+            if (e.target.value == 0) {
+                label.style.display = 'none';
+                select.style.display = 'none';
+            }
+            if(e.target.value == 1){
+                
+                removeOptions(select);
+
+                var opt1 = document.createElement('option');
+                opt1.value = "50/50";
+                opt1.innerHTML = "50/50";
+                select.appendChild(opt1);
+
+                var opt2 = document.createElement('option');
+                opt2.value = "90/10";
+                opt2.innerHTML = "90/10";
+                select.appendChild(opt2);
+
+                var opt3 = document.createElement('option');
+                opt3.value = "80/20";
+                opt3.innerHTML = "80/20";
+                select.appendChild(opt3);
+
+                label.style.display = 'block';
+                select.style.display = 'block';
+            }
+            if (e.target.value == 2) {
+                removeOptions(select);
+
+                var opt1 = document.createElement('option');
+                opt1.value = "60/30/10";
+                opt1.innerHTML = "60/30/10";
+                select.appendChild(opt1);
+
+                var opt2 = document.createElement('option');
+                opt2.value = "70/20/10";
+                opt2.innerHTML = "70/20/10";
+                select.appendChild(opt2);
+
+                var opt3 = document.createElement('option');
+                opt3.value = "80/15/5";
+                opt3.innerHTML = "80/15/5";
+                select.appendChild(opt3);
+
+                label.style.display = 'block';
+                select.style.display = 'block';
+            }
+        }
+
+        function removeOptions(selectElement) {
+            var i, L = selectElement.options.length - 1;
+            for (i = L; i >= 0; i--) {
+                selectElement.remove(i);
+            }
         }
     </script>
     

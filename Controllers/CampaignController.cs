@@ -57,12 +57,14 @@ namespace AlgoBotBackend.Controllers
         public async Task<IActionResult> CreateCampaign(CreateCampaignViewModel dto)
         {
             var firm = _db.Firms.FirstOrDefault(u => u.Id == dto.FirmId);
+            if (dto.ReferalSystem == ReferalSystem.OneLevel) dto.Distribution = "100";
             var campaign = new AdvertisingСampaign()
             {
                 FirmId = dto.FirmId,
                 Firm = firm,
                 Name = dto.Name,
                 ReferalSystem = dto.ReferalSystem,
+                Distribution = dto.Distribution
             };
             if (dto.ScoreType == ScoreType.Summa) campaign.Score = dto.Summ;
             else campaign.ProcentScore = dto.Summ;
