@@ -1,7 +1,7 @@
 ﻿@model AlgoBotBackend.Migrations.DAL.BotUser
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Редактирование пользователя";
 }
 
 <h1>@Model.Username</h1>
@@ -24,7 +24,7 @@
 </div>
 <br />
 <div>
-    <form asp-controller="user" asp-action="Index" asp-antiforgery="false" method="get">
+    <form asp-controller="botuser" asp-action="Index" asp-antiforgery="false" method="get">
         <input type="submit" value="Вернуться к списку пользователей" class="btn btn-outline-secondary btn-sm" />
     </form>
 </div>

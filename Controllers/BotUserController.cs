@@ -37,9 +37,11 @@ namespace AlgoBotBackend.Controllers
             if (user == null) return NotFound();
             var countReferals = 0;
             double cashback = 0;
+            var referals = _db.BotUsers.Where(u => u.ReferalUsername == user.Username).ToList();
+            var referals2 = _db.BotUsers.Where(u => referals.Select(r => r.Username).ToList().Contains(u.ReferalUsername)).ToList();
+            var referals3 = _db.BotUsers.Where(u => referals2.Select(r => r.Username).ToList().Contains(u.ReferalUsername)).ToList();
             if (user.Ñampaign.ReferalSystem == ReferalSystem.OneLevel) 
             {
-                var referals = _db.BotUsers.Where(u => u.ReferalUsername == user.Username).ToList();
                 countReferals = referals.Count();
                 cashback += GetCashback(cashback, 100, referals, user.Ñampaign);
             }
@@ -47,8 +49,6 @@ namespace AlgoBotBackend.Controllers
             {
                 var procents = user.Ñampaign.Distribution.Split("/").Select(p => double.Parse(p)).ToList();
                 var procent = procents[0];
-                var referals = _db.BotUsers.Where(u => u.ReferalUsername == user.Username).ToList();
-                var referals2 = _db.BotUsers.Where(u => referals.Select(r => r.Username).ToList().Contains(u.ReferalUsername)).ToList();
                 countReferals = referals.Count();
 
                 cashback += GetCashback(cashback, procent, referals, user.Ñampaign);
@@ -62,9 +62,6 @@ namespace AlgoBotBackend.Controllers
             {
                 var procents = user.Ñampaign.Distribution.Split("/").Select(p => double.Parse(p)).ToList();
                 var procent = procents[0];
-                var referals = _db.BotUsers.Where(u => u.ReferalUsername == user.Username).ToList();
-                var referals2 = _db.BotUsers.Where(u => referals.Select(r => r.Username).ToList().Contains(u.ReferalUsername)).ToList();
-                var referals3 = _db.BotUsers.Where(u => referals2.Select(r => r.Username).ToList().Contains(u.ReferalUsername)).ToList();
                 countReferals += referals.Count();
                 countReferals += referals2.Count();
                 countReferals += referals3.Count();
@@ -91,6 +88,9 @@ namespace AlgoBotBackend.Controllers
                 Ñampaign = user.Ñampaign,
                 CountReferals = countReferals,
                 Ñashback = (int)cashback,
+                Referals1 = referals,
+                Referals2 = referals2,
+                Referals3 = referals3,
             };
             return View(viewmodel);
         }

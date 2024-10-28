@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<AlgoBotBackend.Migrations.DAL.BotUser>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Все пользователи";
 }
 
 <h1>Все пользователи</h1>
@@ -71,7 +71,7 @@
                 </td>
                 <td>
                     <form asp-controller="botuser" asp-action="edit" asp-antiforgery="false" method="get" asp-route-username="@item.Username">
-                        <input type="submit" value="Редактировать" class="btn btn-outline-secondary btn-sm" />
+                        <input type="submit" value="Добавить оплату" class="btn btn-outline-success btn-sm" />
                     </form>
                 </td>
             </tr>

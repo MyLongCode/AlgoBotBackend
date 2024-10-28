@@ -43,6 +43,7 @@
                 <td>
                     @{
                         var name = EnumHelper<ReferalSystem>.GetDisplayValue(item.ReferalSystem);
+                        if (name != "Одноуровневая") name += $" {item.Distribution}";
                         <p>@name</p>
                     }
                 </td>
