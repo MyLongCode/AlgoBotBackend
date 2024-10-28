@@ -1,4 +1,4 @@
-﻿namespace AlgoBotBackend.Models
+﻿namespace AlgoBotBackend.Models.ViewModels
 {
     public class AuthViewModel
     {

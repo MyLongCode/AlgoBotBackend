@@ -1,6 +1,6 @@
 ﻿using AlgoBotBackend.Migrations.DAL;
 
-namespace AlgoBotBackend.Models
+namespace AlgoBotBackend.Models.ViewModels
 {
     public class CreateCampaignViewModel
     {

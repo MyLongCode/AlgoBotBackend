@@ -16,6 +16,9 @@
                 Юзернейм реферала
             </th>
             <th>
+                Рекламная кампания
+            </th>
+            <th>
                 Имя
             </th>
             <th>
@@ -46,6 +49,9 @@
                     @Html.DisplayFor(modelItem => item.ReferalUsername)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.Сampaign.Name)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.Firstname)
                 </td>
                 <td>
@@ -58,13 +64,13 @@
                     @Html.DisplayFor(modelItem => item.ChildName)
                 </td>
                 <td>
-                    <form asp-controller="user" asp-action="details" asp-antiforgery="false" method="get" asp-route-username="@item.Username">
+                    <form asp-controller="botuser" asp-action="details" asp-antiforgery="false" method="get" asp-route-username="@item.Username">
                         <input type="submit" value="Подробнее" class="btn btn-outline-primary btn-sm" />
                     </form>
    
                 </td>
                 <td>
-                    <form asp-controller="user" asp-action="edit" asp-antiforgery="false" method="get" asp-route-username="@item.Username">
+                    <form asp-controller="botuser" asp-action="edit" asp-antiforgery="false" method="get" asp-route-username="@item.Username">
                         <input type="submit" value="Редактировать" class="btn btn-outline-secondary btn-sm" />
                     </form>
                 </td>
@@ -72,3 +78,7 @@
         }
     </tbody>
 </table>
+
+<form asp-controller="user" asp-action="randomcreate" asp-antiforgery="false" method="post">
+    <input type="submit" value="Сгенерировать рандомных 10 пользователей" class="btn btn-success btn-sm" />
+</form>

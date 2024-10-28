@@ -1,0 +1,60 @@
+﻿@using AlgoBotBackend.Migrations.DAL
+@using AlgoBotBackend.Models.ViewModels
+@model CampaignViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div>
+    <h4>@Model.Name</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Фирма:
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.Firm.Name
+        </dd>
+        <dt class="col-sm-2">
+            Реферальная система:
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                var name = EnumHelper<ReferalSystem>.GetDisplayValue(Model.ReferalSystem);
+                <p>@name</p>
+            }
+        </dd>
+        <dt class="col-sm-2">
+            Кэшбек:
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.Score == null)
+            {
+                @:<p>@Model.ProcentScore %</p>
+            }
+            @if (Model.ProcentScore == null)
+            {
+                @:<p>@Model.Score рублей</p>
+            }
+        </dd>
+        <dt class="col-sm-2">
+            Всего участников:
+        </dt>
+        <dd class="col-sm-10">
+            @Model.CountUsers
+        </dd>
+        <dt class="col-sm-2">
+            Сумма оплат:
+        </dt>
+        <dd class="col-sm-10">
+            @Model.ScoreSumm
+        </dd>
+    </dl>
+</div>
+<br />
+<div>
+    <form asp-controller="campaign" asp-action="Index" asp-antiforgery="false" method="get">
+        <input type="submit" value="Вернуться к списку кампаний" class="btn btn-secondary btn-sm" />
+    </form>
+</div>

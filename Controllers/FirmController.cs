@@ -1,6 +1,6 @@
 ﻿using AlgoBotBackend.Migrations.DAL;
 using AlgoBotBackend.Migrations.EF;
-using AlgoBotBackend.Models;
+using AlgoBotBackend.Models.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace AlgoBotBackend.Controllers
 {
-	[Authorize]
+    [Authorize]
     public class FirmController : Controller
 	{
 		private readonly DBContext _db;
@@ -21,9 +21,9 @@ namespace AlgoBotBackend.Controllers
 			_db = db;
 		}
 
-        public async Task<ActionResult> Index()
+        public async Task<IActionResult> Index()
 		{
-            var firms = await _db.Firms.Include(f => f.Owner).OrderBy(x => x.Name).ToListAsync();
+            var firms = _db.Firms.Include(f => f.Owner).OrderBy(x => x.Name).ToList();
             if (!User.IsInRole("admin")) firms = firms.Where(f => f.Owner.Login == User.Identity.Name).ToList();
 			return View(firms);
 		}
@@ -57,19 +57,13 @@ namespace AlgoBotBackend.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpGet("/firm")]
-        public async Task<ActionResult> GetAllFirms()
-        {
-            return Ok(await _db.Firms.ToListAsync());
-        }
-
         public async Task<IActionResult> Create()
         {
             return View();
         }
 
 		[HttpPost("/firm/create")]
-		public async Task<IActionResult> CreateFirm(CreateFirmModel dto)
+		public async Task<IActionResult> CreateFirm(CreateFirmViewModel dto)
 		{
 			var owner = _db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
 			var firm = new Firm()

@@ -1,11 +1,11 @@
-﻿using AlgoBotBackend.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System;
 using AlgoBotBackend.Migrations.EF;
 using AlgoBotBackend.Migrations.DAL;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using AlgoBotBackend.Models.ViewModels;
 
 namespace AlgoBotBackend.Controllers
 {
