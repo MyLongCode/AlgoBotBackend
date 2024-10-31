@@ -41,7 +41,7 @@ namespace AlgoBotBackend.Controllers
                 {
                     await Authenticate(dto.Login, user.Role); // аутентификация
 
-                    return RedirectToAction("Index", "Campaign");
+                    return RedirectToAction("Index", "Home");
                 }
                 ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }

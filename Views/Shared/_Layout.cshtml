@@ -19,16 +19,26 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Firm" asp-action="Index">Фирмы</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Campaign" asp-action="Index">Рекламные кампании</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="BotUser" asp-action="Index">Пользователи бота</a>
-                        </li>
+                        @if (!User.IsInRole("botuser") && User.Identity.IsAuthenticated)
+                        {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Firm" asp-action="Index">Фирмы</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Campaign" asp-action="Index">Рекламные кампании</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="BotUser" asp-action="Index">Пользователи бота</a>
+                                </li>
+                        }
+                        @if (User.IsInRole("botuser"))
+                        {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Profile" asp-action="Index">Мой профиль</a>
+                                </li>
+                        }
                     </ul>
+                   
                     <ul class="navbar-nav flex-grow-2">
                         @if (User.Identity.IsAuthenticated)
                         {
@@ -36,7 +46,7 @@
                                 <form class="nav-link" asp-controller="auth" asp-action="logout" asp-antiforgery="false" method="post">
                                     <input type="submit" value="Выход" class="btn btn-outline-dark btn-sm" />
                                 </form>
-                            </li> 
+                            </li>
                         }
                         @if (!User.Identity.IsAuthenticated)
                         {
