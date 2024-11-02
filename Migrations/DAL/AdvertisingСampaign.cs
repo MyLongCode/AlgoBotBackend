@@ -10,5 +10,6 @@
 		public string Distribution { get; set; }
 		public int? ProcentScore { get; set; }
 		public int? Score { get; set; }
+		public List<Course> Courses { get; set; }
 	}
 }

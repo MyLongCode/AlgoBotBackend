@@ -27,25 +27,25 @@ namespace AlgoBotBackend.Controllers
             return View(campaigns);
         }
 
-        [HttpGet("/campaign/{id}/details")]
-        public async Task<IActionResult> Details(int id)
-        {
-            if (id == null) return NotFound();
-            var campaign = await _db.AdvertisingСampaigns.Include(f => f.Firm).FirstOrDefaultAsync(u => u.Id == id);
-            if (campaign == null) return NotFound();
-            var campaignUsers = await _db.BotUsers.Where(u => u.CampaignId == campaign.Id).ToListAsync();
-            var viewmodel = new CampaignViewModel()
-            {
-                Name = campaign.Name,
-                Firm = campaign.Firm,
-                ReferalSystem = campaign.ReferalSystem,
-                ProcentScore = campaign.ProcentScore,
-                Score = campaign.Score,
-                CountUsers = campaignUsers.Count,
-                ScoreSumm = campaignUsers.Sum(u => u.Score),
-            };
-            return View(viewmodel);
-        }
+        //[HttpGet("/campaign/{id}/details")]
+        //public async Task<IActionResult> Details(int id)
+        //{
+        //    if (id == null) return NotFound();
+        //    var campaign = await _db.AdvertisingСampaigns.Include(f => f.Firm).FirstOrDefaultAsync(u => u.Id == id);
+        //    if (campaign == null) return NotFound();
+        //    var campaignUsers = await _db.BotUsers.Where(u => u.CampaignId == campaign.Id).ToListAsync();
+        //    var viewmodel = new CampaignViewModel()
+        //    {
+        //        Name = campaign.Name,
+        //        Firm = campaign.Firm,
+        //        ReferalSystem = campaign.ReferalSystem,
+        //        ProcentScore = campaign.ProcentScore,
+        //        Score = campaign.Score,
+        //        CountUsers = campaignUsers.Count,
+        //        ScoreSumm = campaignUsers.Sum(u => u.Score),
+        //    };
+        //    return View(viewmodel);
+        //}
         [HttpGet("/firm/{firmId}/compaign")]
         public async Task<IActionResult> Create([FromRoute] int firmId)
         {

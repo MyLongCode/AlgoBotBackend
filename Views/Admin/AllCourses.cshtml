@@ -1,0 +1,46 @@
+﻿@using AlgoBotBackend.Migrations.DAL
+@model IEnumerable<AlgoBotBackend.Migrations.DAL.Course>
+
+@{
+    ViewData["Title"] = "Курсы";
+}
+
+<h1>Все курсы</h1>
+<h4>Количество: @Model.Count()</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Название
+            </th>
+            <th>
+                ID в Алгоритмике
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.IdInAlgo
+                </td>
+                <td>
+                    <form asp-controller="admin" asp-action="DeleteCourse" asp-antiforgery="false" method="post" asp-route-id="@item.Id">
+                        <input type="submit" value="Удалить" class="btn btn-outline-warning btn-sm" />
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<form asp-controller="admin" asp-action="CreateCourse" asp-antiforgery="false" method="get">
+    <input type="submit" value="Добавить куос" class="btn btn btn-success btn-lg" />
+</form>

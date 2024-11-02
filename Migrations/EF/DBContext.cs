@@ -14,12 +14,14 @@ namespace AlgoBotBackend.Migrations.EF
 		public virtual DbSet<User> Users { get; set; } = null!;
 		public virtual DbSet<Firm> Firms { get; set; } = null!;
 		public virtual DbSet<AdvertisingСampaign> AdvertisingСampaigns { get; set; } = null!;
+        public virtual DbSet<Course> Courses { get; set; } = null!;
+        public virtual DbSet<Payments> Payments { get; set; } = null!;
 
-
-		public DBContext(DbContextOptions<DBContext> options)
+        public DBContext(DbContextOptions<DBContext> options)
             : base(options)
         {
 			AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            Database.EnsureCreated();
 		}
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

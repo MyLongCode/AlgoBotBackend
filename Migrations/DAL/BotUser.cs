@@ -13,7 +13,5 @@ namespace AlgoBotBackend.Migrations.DAL
         public string ChildName { get; set; } = null!;
         public int StageReg { get; set; }
         public int Score { get; set; }
-		public int CampaignId { get; set; }
-		public AdvertisingСampaign Сampaign { get; set; }
 	}
 }

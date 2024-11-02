@@ -1,0 +1,34 @@
+﻿@using AlgoBotBackend.Migrations.DAL
+@using AlgoBotBackend.Models.ViewModels
+@model CreateCourseViewModel
+
+@{
+    ViewData["Title"] = "Создать курс";
+}
+
+<h1>Создать курс</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateCourse">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Название</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+           
+            <label asp-for="IdInAlgo">ID в Алгоритмике</label> <br />
+            <input asp-for="IdInAlgo" type="number" class="form-control" />
+            <br />
+                <input type="submit" value="Создать" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<br />
+<div>
+    <form asp-controller="Admin" asp-action="AllCourses" asp-antiforgery="false" method="get">
+        <input type="submit" value="Вернуться к списку курсов" class="btn btn-outline-secondary btn-sm" />
+    </form>
+</div>
