@@ -32,6 +32,17 @@ namespace AlgoBotBackend.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> DeleteCourse([FromRoute] int id)
+        {
+            if (id == null) return NotFound();
+            var course = _db.Courses.Find(id);
+            if (course == null) return NotFound();
+            _db.Courses.Remove(course);
+            _db.SaveChanges();
+            return RedirectToAction("AllCourses");
+        }
+
+        [HttpPost]
         public async Task<IActionResult> CreateCourseAsync(CreateCourseViewModel dto)
         {
             var course = new Course()
@@ -41,7 +52,7 @@ namespace AlgoBotBackend.Controllers
             };
             await _db.AddAsync(course);
             await _db.SaveChangesAsync();
-            return RedirectToAction("AllCourse");
+            return RedirectToAction("AllCourses");
         }
     }
 }

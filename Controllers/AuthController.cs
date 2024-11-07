@@ -45,7 +45,7 @@ namespace AlgoBotBackend.Controllers
                 }
                 ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }
-            return View(dto);
+            return RedirectToAction("Login");
         }
 
         private async Task Authenticate(string userName, string role)

@@ -33,7 +33,7 @@
                 </td>
                 <td>
                     <form asp-controller="admin" asp-action="DeleteCourse" asp-antiforgery="false" method="post" asp-route-id="@item.Id">
-                        <input type="submit" value="Удалить" class="btn btn-outline-warning btn-sm" />
+                        <input type="submit" value="Удалить" class="btn btn-outline-danger btn-sm" />
                     </form>
                 </td>
             </tr>
@@ -42,5 +42,5 @@
 </table>
 
 <form asp-controller="admin" asp-action="CreateCourse" asp-antiforgery="false" method="get">
-    <input type="submit" value="Добавить куос" class="btn btn btn-success btn-lg" />
+    <input type="submit" value="Добавить курс" class="btn btn btn-success btn-lg" />
 </form>
