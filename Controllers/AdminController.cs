@@ -21,7 +21,7 @@ namespace AlgoBotBackend.Controllers
         [HttpGet]
         public async Task<IActionResult> AllCourses()
         {
-            var courses = _db.Courses.ToList();
+            var courses = _db.Courses.OrderBy(c => c.Name).ToList();
             return View(courses);
         }
 
@@ -48,7 +48,6 @@ namespace AlgoBotBackend.Controllers
             var course = new Course()
             {
                 Name = dto.Name,
-                IdInAlgo = dto.IdInAlgo,
             };
             await _db.AddAsync(course);
             await _db.SaveChangesAsync();

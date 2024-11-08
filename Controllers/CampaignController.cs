@@ -21,7 +21,7 @@ namespace AlgoBotBackend.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var campaigns = await _db.AdvertisingСampaigns.Include(c => c.Firm).ToListAsync();
+            var campaigns = await _db.AdvertisingСampaigns.Include(c => c.Firm).Include(c => c.Courses).OrderBy(c => c.Firm.Name).ToListAsync();
             var authUser = _db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             if (!User.IsInRole("admin")) campaigns = campaigns.Where(c => c.Firm.OwnerId == authUser.Id).ToList();
             return View(campaigns);
@@ -33,7 +33,7 @@ namespace AlgoBotBackend.Controllers
         //    if (id == null) return NotFound();
         //    var campaign = await _db.AdvertisingСampaigns.Include(f => f.Firm).FirstOrDefaultAsync(u => u.Id == id);
         //    if (campaign == null) return NotFound();
-        //    var campaignUsers = await _db.BotUsers.Where(u => u.CampaignId == campaign.Id).ToListAsync();
+        //    var campaignUsersId = await _db.Payments.Where(u => u.CampaignId == campaign.Id).ToListAsync();
         //    var viewmodel = new CampaignViewModel()
         //    {
         //        Name = campaign.Name,
@@ -50,6 +50,9 @@ namespace AlgoBotBackend.Controllers
         public async Task<IActionResult> Create([FromRoute] int firmId)
         {
             var compaign = new CreateCampaignViewModel { FirmId = firmId };
+            var compaigns = _db.AdvertisingСampaigns.Include(c => c.Courses).Where(c => c.FirmId == firmId).ToList();
+            var allCourses = _db.Courses.Include(c => c.Сampaigns).ToList();
+            ViewBag.AllCourses = allCourses.Where(course => !compaigns.Any(comp => comp.Courses.Contains(course))).ToList();
             return View(compaign);
         }
 
@@ -57,6 +60,7 @@ namespace AlgoBotBackend.Controllers
         public async Task<IActionResult> CreateCampaign(CreateCampaignViewModel dto)
         {
             var firm = _db.Firms.FirstOrDefault(u => u.Id == dto.FirmId);
+            var courses = _db.Courses.Where(c => dto.Courses.Contains(c.Name)).ToList();
             if (dto.ReferalSystem == ReferalSystem.OneLevel) dto.Distribution = "100";
             var campaign = new AdvertisingСampaign()
             {
@@ -64,7 +68,8 @@ namespace AlgoBotBackend.Controllers
                 Firm = firm,
                 Name = dto.Name,
                 ReferalSystem = dto.ReferalSystem,
-                Distribution = dto.Distribution
+                Distribution = dto.Distribution,
+                Courses = courses
             };
             if (dto.ScoreType == ScoreType.Summa) campaign.Score = dto.Summ;
             else campaign.ProcentScore = dto.Summ;

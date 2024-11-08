@@ -18,23 +18,30 @@
                 <label asp-for="Name" class="control-label">Название</label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <label asp-for="ReferalSystem"/>Реферальная система <br />
-            <select asp-for="ReferalSystem" class="form-select" onChange="ProcentFunc(event)" asp-items="Html.GetEnumSelectList<ReferalSystem>()"></select>
-            
+
+                <label asp-for="Courses" />Курсы<br />
+                <select multiple asp-for="Courses" class="form-select" >
+                    @foreach (var item in ViewBag.AllCourses)
+                    {
+                        <option value="@item.Name">@item.Name</option>
                 
-            <label asp-for="Distribution" id="procentLabel">Распределение</label>
-            <select asp-for="Distribution" id="procentSelect" class="form-select">
+                    }
+                </select>
+                <label asp-for="ReferalSystem"/>Реферальная система <br />
+                <select asp-for="ReferalSystem" class="form-select" onChange="ProcentFunc(event)" asp-items="Html.GetEnumSelectList<ReferalSystem>()"></select>
+                
+                <label asp-for="Distribution" id="procentLabel">Распределение</label>
+                <select asp-for="Distribution" id="procentSelect" class="form-select">
 
-            </select>
+                </select>
 
 
-            <label asp-for="ScoreType">Система кешбека</label> <br />
-            <select asp-for="ScoreType" id="scoreType" class="form-select" onchange="myFunction(event)" asp-items="Html.GetEnumSelectList<ScoreType>()"></select>
-            <label asp-for="Summ" id="summ">Сумма</label> <br />
-            <input asp-for="Summ" type="number" class="form-control"/>
-            <br />
-            <div class="form-group">
+                <label asp-for="ScoreType">Система кешбека</label> <br />
+                <select asp-for="ScoreType" id="scoreType" class="form-select" onchange="myFunction(event)" asp-items="Html.GetEnumSelectList<ScoreType>()"></select>
+                <label asp-for="Summ" id="summ">Сумма</label> <br />
+                <input asp-for="Summ" type="number" class="form-control"/>
+                <br />
+
                 <input type="submit" value="Создать" class="btn btn-primary" />
             </div>
         </form>

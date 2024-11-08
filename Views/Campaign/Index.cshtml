@@ -17,6 +17,9 @@
                 Фирма
             </th>
             <th>
+                Курсы
+            </th>
+            <th>
                 Реферальная система
             </th>
             <th>
@@ -39,6 +42,9 @@
                 </td>
                 <td>
                     @item.Firm.Name
+                </td>
+                <td>
+                    @string.Join(", ", item.Courses.Select(c => c.Name).ToList())
                 </td>
                 <td>
                     @{

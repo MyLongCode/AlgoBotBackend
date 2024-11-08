@@ -14,9 +14,6 @@
                 Название
             </th>
             <th>
-                ID в Алгоритмике
-            </th>
-            <th>
 
             </th>
         </tr>
@@ -27,9 +24,6 @@
             <tr>
                 <td>
                     @item.Name
-                </td>
-                <td>
-                    @item.IdInAlgo
                 </td>
                 <td>
                     <form asp-controller="admin" asp-action="DeleteCourse" asp-antiforgery="false" method="post" asp-route-id="@item.Id">

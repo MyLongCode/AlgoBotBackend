@@ -10,5 +10,6 @@ namespace AlgoBotBackend.Models.ViewModels
         public string? Distribution { get; set; }
         public ScoreType ScoreType { get; set; }
         public int Summ { get; set; }
+        public List<string> Courses { get; set; }
     }
 }
