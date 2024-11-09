@@ -1,18 +1,27 @@
-﻿
-@model IFormFile
+﻿@using AlgoBotBackend.Models.ViewModels
+
+@model AddPaymentViewModel
 
 @{
     ViewData["Title"] = "Добавить оплату";
 }
 
-<h1>Создать курс</h1>
+<h1>Добавить оплату</h1>
 
-<hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreatePayment" method="post" enctype="multipart/form-data">
-            <input type="file" name="Оплаты" accept=".xls,.xlsx,.csv" /><br>
-            <input type="submit" value="Загрузить" class="btn btn-outline-secondary btn-sm" />
+        <form asp-action="CreatePayments" method="post" enctype="multipart/form-data">
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="inputGroupFile02">Оплаты</label>
+                <input asp-for="Payments" type="file" class="form-control" id="inputGroupFile02" accept=".csv">
+            </div>
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="inputGroupFile01">Ученики</label>
+                <input asp-for="Students" type="file" class="form-control" id="inputGroupFile01" accept=".csv">
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Загрузить" class="btn btn-outline-secondary" />
+            </div>
         </form>
     </div>
 </div>
