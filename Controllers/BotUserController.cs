@@ -26,7 +26,8 @@ namespace AlgoBotBackend.Controllers
         [HttpGet("/user/index")]
         public async Task<IActionResult> Index()
         {
-            return View(await _db.BotUsers.ToListAsync());
+            var botUsers = await _db.BotUsers.ToListAsync();
+            return View(botUsers);
         }
 
         //[HttpGet("/user/{username}/details")]
@@ -40,7 +41,7 @@ namespace AlgoBotBackend.Controllers
         //    var referals = _db.BotUsers.Where(u => u.ReferalUsername == user.Username).ToList();
         //    var referals2 = _db.BotUsers.Where(u => referals.Select(r => r.Username).ToList().Contains(u.ReferalUsername)).ToList();
         //    var referals3 = _db.BotUsers.Where(u => referals2.Select(r => r.Username).ToList().Contains(u.ReferalUsername)).ToList();
-        //    if (user.Ñampaign.ReferalSystem == ReferalSystem.OneLevel) 
+        //    if (user.Ñampaign.ReferalSystem == ReferalSystem.OneLevel)
         //    {
         //        countReferals = referals.Count();
         //        cashback += GetCashback(cashback, 100, referals, user.Ñampaign);
@@ -53,7 +54,7 @@ namespace AlgoBotBackend.Controllers
 
         //        cashback += GetCashback(cashback, procent, referals, user.Ñampaign);
         //        procent = procents[1];
-                
+
         //        countReferals += referals2.Count();
         //        cashback += GetCashback(cashback, procent, referals2, user.Ñampaign);
         //    }
@@ -68,10 +69,10 @@ namespace AlgoBotBackend.Controllers
 
         //        cashback += GetCashback(cashback, procent, referals, user.Ñampaign);
         //        procent = procents[1];
-                
+
         //        cashback += GetCashback(cashback, procent, referals2, user.Ñampaign);
         //        procent = procents[2];
-                
+
         //        cashback += GetCashback(cashback, procent, referals3, user.Ñampaign);
         //    }
 

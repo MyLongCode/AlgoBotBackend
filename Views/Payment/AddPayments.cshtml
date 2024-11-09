@@ -1,0 +1,19 @@
+﻿
+@model IFormFile
+
+@{
+    ViewData["Title"] = "Добавить оплату";
+}
+
+<h1>Создать курс</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreatePayment" method="post" enctype="multipart/form-data">
+            <input type="file" name="Оплаты" accept=".xls,.xlsx,.csv" /><br>
+            <input type="submit" value="Загрузить" class="btn btn-outline-secondary btn-sm" />
+        </form>
+    </div>
+</div>
+<br />

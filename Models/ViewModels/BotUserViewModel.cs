@@ -18,5 +18,6 @@ namespace AlgoBotBackend.Models.ViewModels
         public List<BotUser>? Referals1 { get; set; }
         public List<BotUser>? Referals2 { get; set; }
         public List<BotUser>? Referals3 { get; set; }
+        public bool InAlgo { get; set; }
     }
 }

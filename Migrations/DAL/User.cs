@@ -7,6 +7,6 @@
 		public string Login { get; set; }
 		public string Password { get; set; }
 		public string FullName { get; set; }
-		public int? IdInAlgo { get; set; }
+		public string? PhoneNumber { get; set; }
 	}
 }
