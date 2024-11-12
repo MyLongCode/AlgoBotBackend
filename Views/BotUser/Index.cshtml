@@ -1,5 +1,5 @@
 ﻿@using AlgoBotBackend.Migrations.DAL
-@model IEnumerable<BotUser>
+@model IEnumerable<User>
 
 @{
     ViewData["Title"] = "Все пользователи";
@@ -17,9 +17,6 @@
                 Юзернейм реферала
             </th>
             <th>
-                Рекламная кампания
-            </th>
-            <th>
                 Имя
             </th>
             <th>
@@ -32,7 +29,7 @@
                 Имя ребёнка
             </th>
             <th>
-                Найден ли в системе?
+                Счёт
             </th>
             <th>
 
@@ -47,13 +44,13 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Username)
+                    @Html.DisplayFor(modelItem => item.Login)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ReferalUsername)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Firstname)
+                    @Html.DisplayFor(modelItem => item.FullName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.PhoneNumber)
@@ -65,16 +62,17 @@
                     @Html.DisplayFor(modelItem => item.ChildName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.InAlgo)
+                    @Html.DisplayFor(modelItem => item.Score) рублей
                 </td>
+
                 <td>
-                    <form asp-controller="botuser" asp-action="details" asp-antiforgery="false" method="get" asp-route-username="@item.Username">
+                    <form asp-controller="botuser" asp-action="details" asp-antiforgery="false" method="get" asp-route-username="@item.Login">
                         <input type="submit" value="Подробнее" class="btn btn-outline-primary btn-sm" />
                     </form>
    
                 </td>
                 <td>
-                    <form asp-controller="botuser" asp-action="edit" asp-antiforgery="false" method="get" asp-route-username="@item.Username">
+                    <form asp-controller="botuser" asp-action="edit" asp-antiforgery="false" method="get" asp-route-username="@item.Login">
                         <input type="submit" value="Добавить оплату" class="btn btn-outline-success btn-sm" />
                     </form>
                 </td>

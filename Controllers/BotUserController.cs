@@ -26,7 +26,7 @@ namespace AlgoBotBackend.Controllers
         [HttpGet("/user/index")]
         public async Task<IActionResult> Index()
         {
-            var botUsers = await _db.BotUsers.ToListAsync();
+            var botUsers = await _db.Users.Where(b => b.Role == "botuser").ToListAsync();
             return View(botUsers);
         }
 
@@ -100,7 +100,7 @@ namespace AlgoBotBackend.Controllers
         public async Task<IActionResult> Edit(string username)
         {
             if (username == null) return NotFound();
-            var user = await _db.BotUsers.FirstOrDefaultAsync(u => u.Username == username);
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Login == username);
             if (user == null) return NotFound();
             return View(user);
         }
@@ -109,15 +109,15 @@ namespace AlgoBotBackend.Controllers
         public async Task<IActionResult> Edit(string username, int score)
         {
             if (username == null) return NotFound();
-            var user = await _db.BotUsers.FirstOrDefaultAsync(u => u.Username == username);
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Login == username);
             if (user == null) return NotFound();
             user.Score += score;
-            _db.BotUsers.Update(user);
+            _db.Users.Update(user);
             await _db.SaveChangesAsync();
             return View("Edit", user);
         }
 
-        public double GetCashback(double cashback, double procent, IEnumerable<BotUser> referals, Advertising—ampaign campaign)
+        public double GetCashback(double cashback, double procent, IEnumerable<User> referals, Advertising—ampaign campaign)
         {
             var countReferals = referals.Count();
             if (campaign.ProcentScore != null) cashback +=  (int)(referals.Sum(r => r.Score) * campaign.ProcentScore / 100) * procent / 100;

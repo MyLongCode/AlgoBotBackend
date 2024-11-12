@@ -1,10 +1,12 @@
-﻿using AlgoBotBackend.Migrations.EF;
+﻿using AlgoBotBackend.Migrations.DAL;
+using AlgoBotBackend.Migrations.EF;
 using AlgoBotBackend.Models.CSV;
 using AlgoBotBackend.Models.ViewModels;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileSystemGlobbing.Internal;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -38,16 +40,54 @@ namespace AlgoBotBackend.Controllers
             var config = new CsvConfiguration(CultureInfo.InvariantCulture) { Delimiter = ",", HasHeaderRecord = true };
             var csvPayments = new CsvReader(readerPayments, config);
             var csvStudents = new CsvReader(readerStudents, config);
-            var payments = csvPayments.GetRecords<PaymentCSV>();
-            var students = csvStudents.GetRecords<StudentCSV>();
-            var pattern = "[-., ({})@#$%^&*!+=:;/\\[\\]]+";
-            var rgx = new Regex(pattern);
-            students = students.Select(s => 
+            var payments = csvPayments.GetRecords<PaymentCSV>().ToList();
+            var students = csvStudents.GetRecords<StudentCSV>().ToList();
+
+            var users = await _db.Users.ToListAsync();
+            var courses = await _db.Courses.ToListAsync();
+
+            students = students
+                .Where(s => s.Phonenumber.Length > 10)
+                .Where(s => payments.FirstOrDefault(p => p.StudentId == s.StudentId) != null)
+                .Select(s => 
             {
-                s.Phonenumber = rgx.Replace(s.Phonenumber, "");
+                s.Phonenumber = s.Phonenumber.Replace("(", "").Replace(")", "").Replace("-", "").Replace("_", "").Replace(" ", "").Replace("+","");
                 return s;
+            })
+                .Where(s => users.FirstOrDefault(p => p.PhoneNumber == s.Phonenumber) != null)
+                .ToList();
+
+
+
+            var studentPayments = payments
+                .Where(s => students.FirstOrDefault(p => p.StudentId == s.StudentId) != null)
+                .Where(s => courses.FirstOrDefault(p => p.Name == s.CourseName) != null)
+                .Select(s => new StudentPaymentsCSV
+            {
+                Amount = (int) s.Amount,
+                CouseName = s.CourseName,
+                PhoneNumber = students.FirstOrDefault( x => x.StudentId == s.StudentId).Phonenumber
             }).ToList();
-            return Ok(students);
+
+
+
+            var finishPayments = studentPayments.Select(s => new Payment()
+            {
+                UserId = users.FirstOrDefault(u => u.PhoneNumber == s.PhoneNumber).Id,
+                Amount = s.Amount,
+                CourseId = courses.FirstOrDefault(c => c.Name == s.CouseName).Id,
+            });
+            
+            foreach(var user in users)
+                user.Score += finishPayments.Where(p => p.UserId == user.Id).Sum(p => p.Amount);
+
+            _db.Users.UpdateRange(users);
+            await _db.SaveChangesAsync();
+
+            await _db.Payments.AddRangeAsync(finishPayments);
+            await _db.SaveChangesAsync();
+
+            return Ok(finishPayments);
         }
     }
 }

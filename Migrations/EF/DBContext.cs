@@ -10,7 +10,6 @@ namespace AlgoBotBackend.Migrations.EF
     public class DBContext : DbContext
     {
 
-        public virtual DbSet<BotUser> BotUsers { get; set; } = null!;
 		public virtual DbSet<User> Users { get; set; } = null!;
 		public virtual DbSet<Firm> Firms { get; set; } = null!;
 		public virtual DbSet<AdvertisingСampaign> AdvertisingСampaigns { get; set; } = null!;
@@ -21,7 +20,7 @@ namespace AlgoBotBackend.Migrations.EF
             : base(options)
         {
 			AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-            Database.EnsureCreated();
+                Database.EnsureCreated();
 		}
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

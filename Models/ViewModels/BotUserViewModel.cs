@@ -15,9 +15,9 @@ namespace AlgoBotBackend.Models.ViewModels
         public AdvertisingСampaign Сampaign { get; set; }
         public int Сashback { get; set; }
         public int CountReferals { get; set; }
-        public List<BotUser>? Referals1 { get; set; }
-        public List<BotUser>? Referals2 { get; set; }
-        public List<BotUser>? Referals3 { get; set; }
+        public List<User>? Referals1 { get; set; }
+        public List<User>? Referals2 { get; set; }
+        public List<User>? Referals3 { get; set; }
         public bool InAlgo { get; set; }
     }
 }

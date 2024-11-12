@@ -1,16 +1,16 @@
-﻿@model AlgoBotBackend.Migrations.DAL.BotUser
+﻿@model AlgoBotBackend.Migrations.DAL.User
 
 @{
     ViewData["Title"] = "Редактирование пользователя";
 }
 
-<h1>@Model.Username</h1>
-<h2>@Model.Firstname</h2>
+<h1>@Model.Login</h1>
+<h2>@Model.FullName</h2>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <h4>Текущий счёт: @Model.Score</h4>
-        <form asp-action="edit" method="post" asp-route-username="@Model.Username">
+        <form asp-action="edit" method="post" asp-route-username="@Model.Login">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <input asp-for="Score" class="form-control" value="0"/>
