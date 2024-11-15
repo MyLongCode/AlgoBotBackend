@@ -35,6 +35,9 @@ namespace AlgoBotBackend.Controllers
         public async Task<IActionResult> CreatePayments(AddPaymentViewModel dto)
         {
             if (dto.Payments == null) return StatusCode(400);
+
+            
+
             var readerPayments = new StreamReader(dto.Payments.OpenReadStream());
             var readerStudents = new StreamReader(dto.Students.OpenReadStream());
             var config = new CsvConfiguration(CultureInfo.InvariantCulture) { Delimiter = ",", HasHeaderRecord = true };
@@ -44,6 +47,8 @@ namespace AlgoBotBackend.Controllers
             var students = csvStudents.GetRecords<StudentCSV>().ToList();
 
             var users = await _db.Users.ToListAsync();
+            var ownerId = users.FirstOrDefault(x => x.Login == User.Identity.Name).Id;
+            var campaigns = await _db.AdvertisingСampaigns.Include(x => x.Firm).Include(x => x.Courses).Where(x => x.Firm.OwnerId == ownerId).ToListAsync();
             var courses = await _db.Courses.ToListAsync();
 
             students = students
@@ -61,22 +66,24 @@ namespace AlgoBotBackend.Controllers
 
             var studentPayments = payments
                 .Where(s => students.FirstOrDefault(p => p.StudentId == s.StudentId) != null)
-                .Where(s => courses.FirstOrDefault(p => p.Name == s.CourseName) != null)
+                .Where(s => campaigns.Where(c => c.Courses.Select(x => x.Name).Contains(s.CourseName)) != null)
                 .Select(s => new StudentPaymentsCSV
             {
                 Amount = (int) s.Amount,
-                CouseName = s.CourseName,
+                Campaign = campaigns.FirstOrDefault(c => c.Courses.Select(x => x.Name).Contains(s.CourseName)),
                 PhoneNumber = students.FirstOrDefault( x => x.StudentId == s.StudentId).Phonenumber
             }).ToList();
 
 
 
-            var finishPayments = studentPayments.Select(s => new Payment()
+            var finishPayments = studentPayments
+                .Where(s => s.Campaign != null)
+                .Select(s => new Payment()
             {
                 UserId = users.FirstOrDefault(u => u.PhoneNumber == s.PhoneNumber).Id,
                 Amount = s.Amount,
-                CourseId = courses.FirstOrDefault(c => c.Name == s.CouseName).Id,
-            });
+                CampaignId = s.Campaign.Id,
+            }).ToList();
             
             foreach(var user in users)
                 user.Score += finishPayments.Where(p => p.UserId == user.Id).Sum(p => p.Amount);

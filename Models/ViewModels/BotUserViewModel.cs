@@ -11,13 +11,9 @@ namespace AlgoBotBackend.Models.ViewModels
         public string ChildAge { get; set; } = null!;
         public string ChildName { get; set; } = null!;
         public int Score { get; set; }
-        public int CampaignId { get; set; }
-        public AdvertisingСampaign Сampaign { get; set; }
         public int Сashback { get; set; }
-        public int CountReferals { get; set; }
         public List<User>? Referals1 { get; set; }
         public List<User>? Referals2 { get; set; }
         public List<User>? Referals3 { get; set; }
-        public bool InAlgo { get; set; }
     }
 }

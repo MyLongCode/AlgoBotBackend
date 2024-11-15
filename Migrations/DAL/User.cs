@@ -13,5 +13,6 @@
         public string? ChildName { get; set; } = null!;
         public int? StageReg { get; set; }
         public int Score { get; set; } = 0;
+        public List<Payment> Payments { get; set; } = new List<Payment>();
     }
 }

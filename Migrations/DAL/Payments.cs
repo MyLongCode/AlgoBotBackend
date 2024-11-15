@@ -1,13 +1,13 @@
-﻿namespace AlgoBotBackend.Migrations.DAL
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AlgoBotBackend.Migrations.DAL
 {
     public class Payment
     {
+        [Key]
         public int Id { get; set; }
         public int UserId { get; set; }
-        public User User { get; set; }
         public int Amount { get; set; }
-        public int CourseId { get; set; }
-        public Course Course { get; set; }
-        public DateTime DateTime { get; set; }
+        public int CampaignId { get; set; }
     }
 }
