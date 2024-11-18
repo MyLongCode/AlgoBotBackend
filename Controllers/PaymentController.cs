@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileSystemGlobbing.Internal;
+using NuGet.Versioning;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -87,6 +88,35 @@ namespace AlgoBotBackend.Controllers
             
             foreach(var user in users)
                 user.Score += finishPayments.Where(p => p.UserId == user.Id).Sum(p => p.Amount);
+
+            foreach(var payment in finishPayments)
+            {
+                var campaign = campaigns.FirstOrDefault(x => x.Id == payment.CampaignId);
+                var user = users.FirstOrDefault(x => x.Id == payment.UserId);
+                var procents = campaign.Distribution.Split('/').Select(x => int.Parse(x)).ToList();
+
+                var referal = users.FirstOrDefault(x => x.Login == user.ReferalUsername);
+                if (referal == null) continue;
+                if (campaign.ProcentScore != null) referal.Cashback += (int)(payment.Amount * campaign.ProcentScore * procents[0] / 10000);
+                if (campaign.Score != null) referal.Cashback += (int)(campaign.Score * procents[0] / 100);
+
+                if (campaign.ReferalSystem != ReferalSystem.OneLevel)
+                {
+                    var referal2 = users.FirstOrDefault(user => user.Login == referal.ReferalUsername);
+                    if (referal2 == null) continue;
+                    if (campaign.ProcentScore != null) referal2.Cashback += (int)(payment.Amount * campaign.ProcentScore * procents[1] / 10000);
+                    if (campaign.Score != null) referal2.Cashback += (int)(campaign.Score * procents[1] / 100);
+
+                    if (campaign.ReferalSystem == ReferalSystem.ThreeLevel)
+                    {
+                        var referal3 = users.FirstOrDefault(user => user.Login == referal2.ReferalUsername);
+                        if (referal3 == null) continue;
+                        if (campaign.ProcentScore != null) referal3.Cashback += (int)(payment.Amount * campaign.ProcentScore * procents[2] / 10000);
+                        if (campaign.Score != null) referal3.Cashback += (int)(campaign.Score * procents[2] / 100);
+                    }
+                }
+            }
+
 
             _db.Users.UpdateRange(users);
             await _db.SaveChangesAsync();
