@@ -11,7 +11,7 @@ namespace AlgoBotBackend.Models.ViewModels
         public string ChildAge { get; set; } = null!;
         public string ChildName { get; set; } = null!;
         public int Score { get; set; }
-        public int Сashback { get; set; }
+        public int Cashback { get; set; }
         public List<User>? Referals1 { get; set; }
         public List<User>? Referals2 { get; set; }
         public List<User>? Referals3 { get; set; }

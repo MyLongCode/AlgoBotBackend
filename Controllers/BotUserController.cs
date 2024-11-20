@@ -71,7 +71,7 @@ namespace AlgoBotBackend.Controllers
                 PhoneNumber = user.PhoneNumber,
                 ChildAge = user.ChildAge,
                 ChildName = user.ChildName,
-                Ñashback = user.Cashback,
+                Cashback = user.Cashback,
                 Score = user.Score,
                 Referals1 = referals1,
                 Referals2 = referals2,
