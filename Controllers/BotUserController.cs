@@ -78,7 +78,7 @@ namespace AlgoBotBackend.Controllers
                 Referals3 = referals3,
             };
 
-            return Ok(viewmodel);
+            return View(viewmodel);
         }
 
         [HttpGet("/user/{username}/edit")]

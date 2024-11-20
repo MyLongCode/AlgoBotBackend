@@ -1,4 +1,4 @@
-﻿@* @using AlgoBotBackend.Migrations.DAL
+﻿@using AlgoBotBackend.Migrations.DAL
 @using AlgoBotBackend.Models.ViewModels
 @model BotUserViewModel
 
@@ -47,32 +47,31 @@
             @Model.Score
         </dd>
         <dt class="col-sm-2">
-            Привёл друзей:
-        </dt>
-        <dd class="col-sm-10">
-            @Model.CountReferals
-        </dd>
-        <dt class="col-sm-2">
             Сумма кэшбэка:
         </dt>
         <dd class="col-sm-10">
             @Model.Сashback
         </dd>
         <hr />
-        <h4>Рефералы</h4>
-        <h5>1 уровень</h5>
-        <ol class="list-group list-group-numbered col-sm-2">
-            @foreach (var item in Model.Referals1)
-            {
-                <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <div class="ms-2 me-auto">
-                        <div class="fw-bold">@item.Login</div>
-                        @item.FullName
-                    </div>
-                </li>
-            }
-        </ol>
-        @if (Model.Сampaign.ReferalSystem == ReferalSystem.TwoLevel || Model.Сampaign.ReferalSystem == ReferalSystem.ThreeLevel)
+        @if (Model.Referals1.Count != 0)
+        {
+            <h4>Рефералы</h4>
+            <div>
+            <h5>1 уровень</h5>
+                <ol class="list-group list-group-numbered col-sm-2">
+                    @foreach (var item in Model.Referals1)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">@item.Login</div>
+                                @item.FullName
+                            </div>
+                        </li>
+                    }
+                </ol>
+            </div>
+        }
+        @if (Model.Referals2.Count != 0)
         {
             <div>
                 <h5>2 уровень</h5>
@@ -89,7 +88,7 @@
                 </ol>
             </div>
         }
-        @if (Model.Сampaign.ReferalSystem == ReferalSystem.ThreeLevel)
+        @if (Model.Referals3.Count != 0)
         {
             <div>
                 <h5>3 уровень</h5>
@@ -114,4 +113,3 @@
         <input type="submit" value="Вернуться к списку пользователей" class="btn btn-outline-secondary btn-sm" />
     </form>
 </div>
- *@

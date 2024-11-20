@@ -9,7 +9,7 @@
 <h1>Добавить оплату</h1>
 
 <div class="row">
-    <div class="col-md-4">
+    <div asp-validation-summary="All" class="col-md-4">
         <form asp-action="CreatePayments" method="post" enctype="multipart/form-data">
             <div class="input-group mb-3">
                 <label class="input-group-text" for="inputGroupFile02">Оплаты</label>
