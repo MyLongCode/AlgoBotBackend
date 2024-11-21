@@ -58,3 +58,51 @@
         <input type="submit" value="Вернуться к списку кампаний" class="btn btn-secondary btn-sm" />
     </form>
 </div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                Юзернейм
+            </th>
+            <th>
+                ФИО
+            </th>
+            <th>
+                Сумма
+            </th>
+            <th>
+
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Payments)
+        {
+            <tr>
+                <td>
+                    @item.Id
+                </td>
+                <td>
+                    @item.Username
+                </td>
+                <td>
+                    @item.Fullname
+                </td>
+                <td>
+                    @item.Amount
+                </td>
+                <td>
+                    <form asp-controller="payment" asp-action="delete" asp-antiforgery="false" method="get" asp-route-id="@item.Id">
+                        <input type="submit" value="Удалить" class="btn btn-outline-danger btn-sm" />
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

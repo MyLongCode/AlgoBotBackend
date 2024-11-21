@@ -27,6 +27,27 @@ namespace AlgoBotBackend.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var ownerId = _db.Users.FirstOrDefault(x => x.Login == User.Identity.Name).Id;
+            var firm = _db.Firms.FirstOrDefault(x => x.OwnerId == ownerId);
+            var campaigns = _db.AdvertisingСampaigns.Where(x => x.FirmId == firm.Id).ToList();
+            var campaignsId = campaigns.Select(x => x.Id).ToList();
+            var users = _db.Users.ToList();
+            var payments = _db.Payments.Where(x => campaignsId.Contains(x.CampaignId)).ToList();
+            var viewmodel = payments.Select(x => new PaymentViewModel
+            {
+                Id = x.Id,
+                Username = users.First(y => y.Id == x.UserId).Login,
+                Fullname = users.First(y => y.Id == x.UserId).FullName,
+                CampaignName = campaigns.First(y => y.Id == x.CampaignId).Name,
+                Amount = x.Amount,
+            });
+
+            return View(viewmodel);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> AddPayments()
         {
             return View();
@@ -133,6 +154,46 @@ namespace AlgoBotBackend.Controllers
                 return View("AddPayments");
             }
             
+        }
+
+        [HttpPost("/payment/{id}/delete")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var payment = _db.Payments.Find(id);
+            var campaign = _db.AdvertisingСampaigns.FirstOrDefault(x => x.Id == payment.CampaignId);
+            var user = _db.Users.FirstOrDefault(x => x.Id == payment.UserId);
+            var procents = campaign.Distribution.Split('/').Select(x => int.Parse(x)).ToList();
+
+            var referal = _db.Users.FirstOrDefault(x => x.Login == user.ReferalUsername);
+            if (referal != null)
+            {
+                if (campaign.ProcentScore != null) referal.Cashback -= (int)(payment.Amount * campaign.ProcentScore * procents[0] / 10000);
+                if (campaign.Score != null) referal.Cashback -= (int)(campaign.Score * procents[0] / 100);
+
+                if (campaign.ReferalSystem != ReferalSystem.OneLevel)
+                {
+                    var referal2 = _db.Users.FirstOrDefault(user => user.Login == referal.ReferalUsername);
+                    if (referal2 != null)
+                    {
+                        if (campaign.ProcentScore != null) referal2.Cashback -= (int)(payment.Amount * campaign.ProcentScore * procents[1] / 10000);
+                        if (campaign.Score != null) referal2.Cashback -= (int)(campaign.Score * procents[1] / 100);
+
+                        if (campaign.ReferalSystem == ReferalSystem.ThreeLevel)
+                        {
+                            var referal3 = _db.Users.FirstOrDefault(user => user.Login == referal2.ReferalUsername);
+                            if (referal3 == null)
+                            {
+                                if (campaign.ProcentScore != null) referal3.Cashback -= (int)(payment.Amount * campaign.ProcentScore * procents[2] / 10000);
+                                if (campaign.Score != null) referal3.Cashback -= (int)(campaign.Score * procents[2] / 100);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            _db.Payments.Remove(payment);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
     }
 }

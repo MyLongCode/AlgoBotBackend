@@ -69,8 +69,8 @@
                     </form>
                 </td>
                 <td>
-                    <form asp-controller="campaign" asp-action="edit" asp-antiforgery="false" method="get" asp-route-id="@item.Id">
-                        <input type="submit" value="Редактировать" class="btn btn-outline-secondary btn-sm" />
+                    <form asp-controller="firm" asp-action="delete" asp-antiforgery="false" method="post" asp-route-id="@item.Id">
+                        <input type="submit" value="Удалить" class="btn btn-outline-danger btn-sm" />
                     </form>
                 </td>
             </tr>

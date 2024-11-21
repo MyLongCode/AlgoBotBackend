@@ -27,25 +27,6 @@ namespace AlgoBotBackend.Controllers
             return View(campaigns);
         }
 
-        //[HttpGet("/campaign/{id}/details")]
-        //public async Task<IActionResult> Details(int id)
-        //{
-        //    if (id == null) return NotFound();
-        //    var campaign = await _db.AdvertisingСampaigns.Include(f => f.Firm).FirstOrDefaultAsync(u => u.Id == id);
-        //    if (campaign == null) return NotFound();
-        //    var campaignUsersId = await _db.Payments.Where(u => u.CampaignId == campaign.Id).ToListAsync();
-        //    var viewmodel = new CampaignViewModel()
-        //    {
-        //        Name = campaign.Name,
-        //        Firm = campaign.Firm,
-        //        ReferalSystem = campaign.ReferalSystem,
-        //        ProcentScore = campaign.ProcentScore,
-        //        Score = campaign.Score,
-        //        CountUsers = campaignUsers.Count,
-        //        ScoreSumm = campaignUsers.Sum(u => u.Score),
-        //    };
-        //    return View(viewmodel);
-        //}
         [HttpGet("/firm/{firmId}/compaign")]
         public async Task<IActionResult> Create([FromRoute] int firmId)
         {
@@ -75,6 +56,50 @@ namespace AlgoBotBackend.Controllers
             else campaign.ProcentScore = dto.Summ;
             await _db.AdvertisingСampaigns.AddAsync(campaign);
             await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet("/campaign/{id}/details")]
+        public async Task<IActionResult> Details(int id)
+        {
+            var campaign = _db.AdvertisingСampaigns.Include(x => x.Firm).FirstOrDefault(x => x.Id == id);
+            var users = _db.Users.ToList();
+            var payments = _db.Payments
+                .Where(x => x.CampaignId == campaign.Id)
+                .ToList();
+            
+            var viewmodel = new CampaignViewModel
+            {
+                Name = campaign.Name,
+                Firm = campaign.Firm,
+                ReferalSystem = campaign.ReferalSystem,
+                ProcentScore = campaign.ProcentScore,
+                Score = campaign.Score,
+                CountUsers = payments.GroupBy(x => x.UserId).Select(x => x.First()).ToList().Count,
+                ScoreSumm = payments.Sum(x => x.Amount),
+                Payments = payments.Select(x => new PaymentViewModel
+                {
+                    Id = x.Id,
+                    Username = users.First(y => y.Id == x.UserId).Login,
+                    Fullname = users.First(y => y.Id == x.UserId).FullName,
+                    CampaignName = "",
+                    Amount = x.Amount,
+                }).ToList()
+            };
+            return View(viewmodel);
+        }
+
+        [HttpPost("/campaign/{id}/delete")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var campaign = _db.AdvertisingСampaigns.Find(id);
+            var firm = _db.Firms.FirstOrDefault(f => f.Id == campaign.FirmId);
+            var owner = _db.Users.FirstOrDefault(x => x.Id == firm.OwnerId);
+            if (User.Identity.Name == owner.Login)
+            {
+                _db.Firms.Remove(firm);
+                await _db.SaveChangesAsync();
+            }
             return RedirectToAction("Index");
         }
     }

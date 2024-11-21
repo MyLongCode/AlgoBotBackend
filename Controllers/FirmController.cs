@@ -57,6 +57,7 @@ namespace AlgoBotBackend.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             return View();
@@ -76,5 +77,18 @@ namespace AlgoBotBackend.Controllers
 			await _db.SaveChangesAsync();
 			return RedirectToAction("Index");
 		}
-	}
+
+        [HttpPost("/firm/{id}/delete")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var firm = _db.Firms.FirstOrDefault(f => f.Id == id);
+            var owner = _db.Users.FirstOrDefault(x => x.Id == firm.OwnerId);
+            if (User.Identity.Name == owner.Login)
+            {
+                _db.Firms.Remove(firm);
+                await _db.SaveChangesAsync();
+            }
+            return RedirectToAction("Index");
+        }
+    }
 }

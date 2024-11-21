@@ -11,5 +11,6 @@ namespace AlgoBotBackend.Models.ViewModels
         public int? Score { get; set; }
         public int CountUsers { get; set; }
         public int ScoreSumm { get; set; }
+        public List<PaymentViewModel> Payments { get; set; }
     }
 }
