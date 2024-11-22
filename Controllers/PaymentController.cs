@@ -146,7 +146,7 @@ namespace AlgoBotBackend.Controllers
 
                 await _db.Payments.AddRangeAsync(finishPayments);
                 await _db.SaveChangesAsync();
-                return Ok(finishPayments);
+                return RedirectToAction("Index");
             }
             catch (Exception e)
             {

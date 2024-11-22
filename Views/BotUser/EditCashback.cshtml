@@ -1,7 +1,7 @@
 ﻿@model AlgoBotBackend.Migrations.DAL.User
 
 @{
-    ViewData["Title"] = "Редактирование пользователя";
+    ViewData["Title"] = "Добавление/вычитание кэшбека";
 }
 
 <h1>@Model.Login</h1>
@@ -9,12 +9,12 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <h4>Текущий счёт: @Model.Score</h4>
-        <form asp-action="edit" method="post" asp-route-username="@Model.Login">
+        <h4>Текущий кэшбек: @Model.Score</h4>
+        <form asp-action="editCashback" method="post" asp-route-username="@Model.Login">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <input asp-for="Score" class="form-control" value="0"/>
-                <span asp-validation-for="Score" class="text-danger"></span>
+                <input asp-for="Cashback" class="form-control" value="0"/>
+                <span asp-validation-for="Cashback" class="text-danger"></span>
             </div>
 	        <div class="form-group">
                 <input type="submit" value="Добавить" class="btn btn-primary" />

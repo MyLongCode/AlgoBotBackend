@@ -90,13 +90,25 @@ namespace AlgoBotBackend.Controllers
             return View(user);
         }
 
-        [HttpPost("/user/{username}/edit")]
-        public async Task<IActionResult> Edit(string username, int score)
+        [HttpPost("/user/{username}/editScore")]
+        public async Task<IActionResult> EditScore(string username, int score)
         {
             if (username == null) return NotFound();
             var user = await _db.Users.FirstOrDefaultAsync(u => u.Login == username);
             if (user == null) return NotFound();
             user.Score += score;
+            _db.Users.Update(user);
+            await _db.SaveChangesAsync();
+            return View("Edit", user);
+        }
+
+        [HttpPost("/user/{username}/editCashback")]
+        public async Task<IActionResult> EditCashback(string username, int score)
+        {
+            if (username == null) return NotFound();
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Login == username);
+            if (user == null) return NotFound();
+            user.Cashback -= score;
             _db.Users.Update(user);
             await _db.SaveChangesAsync();
             return View("Edit", user);
