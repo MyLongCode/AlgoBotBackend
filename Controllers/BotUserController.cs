@@ -81,8 +81,17 @@ namespace AlgoBotBackend.Controllers
             return View(viewmodel);
         }
 
-        [HttpGet("/user/{username}/edit")]
-        public async Task<IActionResult> Edit(string username)
+        [HttpGet("/user/{username}/score")]
+        public async Task<IActionResult> Score(string username)
+        {
+            if (username == null) return NotFound();
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Login == username);
+            if (user == null) return NotFound();
+            return View(user);
+        }
+
+        [HttpGet("/user/{username}/cashback")]
+        public async Task<IActionResult> Cashback(string username)
         {
             if (username == null) return NotFound();
             var user = await _db.Users.FirstOrDefaultAsync(u => u.Login == username);
@@ -99,19 +108,19 @@ namespace AlgoBotBackend.Controllers
             user.Score += score;
             _db.Users.Update(user);
             await _db.SaveChangesAsync();
-            return View("Edit", user);
+            return View("Score", user);
         }
 
         [HttpPost("/user/{username}/editCashback")]
-        public async Task<IActionResult> EditCashback(string username, int score)
+        public async Task<IActionResult> EditCashback(string username, int cashback)
         {
             if (username == null) return NotFound();
             var user = await _db.Users.FirstOrDefaultAsync(u => u.Login == username);
             if (user == null) return NotFound();
-            user.Cashback -= score;
+            user.Cashback += cashback;
             _db.Users.Update(user);
             await _db.SaveChangesAsync();
-            return View("Edit", user);
+            return View("Cashback", user);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

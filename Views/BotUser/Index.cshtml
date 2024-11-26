@@ -81,12 +81,12 @@
    
                 </td>
                 <td>
-                    <form asp-controller="botuser" asp-action="editScore" asp-antiforgery="false" method="get" asp-route-username="@item.Login">
+                    <form asp-controller="botuser" asp-action="Score" asp-antiforgery="false" method="get" asp-route-username="@item.Login">
                         <input type="submit" value="Добавить оплату" class="btn btn-outline-success btn-sm" />
                     </form>
                 </td>
                 <td>
-                    <form asp-controller="botuser" asp-action="editCashback" asp-antiforgery="false" method="get" asp-route-username="@item.Login">
+                    <form asp-controller="botuser" asp-action="Cashback" asp-antiforgery="false" method="get" asp-route-username="@item.Login">
                         <input type="submit" value="Изменить кэшбек" class="btn btn-outline-success btn-sm" />
                     </form>
                 </td>

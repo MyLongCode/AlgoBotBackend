@@ -53,6 +53,7 @@
             @Model.Cashback
         </dd>
         <hr />
+
         @if (Model.Referals1.Count != 0)
         {
             <h4>Рефералы</h4>
@@ -64,7 +65,8 @@
                         <li class="list-group-item d-flex justify-content-between align-items-start">
                             <div class="ms-2 me-auto">
                                 <div class="fw-bold">@item.Login</div>
-                                @item.FullName
+                                Имя: @item.FullName
+                                Спонсор: @item.ReferalUsername
                             </div>
                         </li>
                     }
@@ -81,7 +83,8 @@
                         <li class="list-group-item d-flex justify-content-between align-items-start">
                             <div class="ms-2 me-auto">
                                 <div class="fw-bold">@item.Login</div>
-                                @item.FullName
+                                Имя: @item.FullName
+                                Спонсор: @item.ReferalUsername
                             </div>
                         </li>
                     }
@@ -98,7 +101,8 @@
                         <li class="list-group-item d-flex justify-content-between align-items-start">
                             <div class="ms-2 me-auto">
                                 <div class="fw-bold">@item.Login</div>
-                                @item.FullName
+                                Имя: @item.FullName
+                                Спонсор: @item.ReferalUsername
                             </div>
                         </li>
                     }
