@@ -1,0 +1,51 @@
+﻿@using AlgoBotBackend.Migrations.DAL
+@model IEnumerable<AlgoBotBackend.Migrations.DAL.User>
+
+@{
+    ViewData["Title"] = "Администраторы";
+}
+
+<h1>Все администраторы</h1>
+<h4>Количество: @Model.Count()</h4>
+<form asp-controller="admin" asp-action="CreateUser" asp-antiforgery="false" method="get">
+    <input type="submit" value="Добавить администратора" class="btn btn btn-success btn-lg" />
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                ФИО
+            </th>
+            <th>
+                Логин
+            </th>
+            <th>
+                Пароль
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.FullName
+                </td>
+                <td>
+                    @item.Login
+                </td>
+                <td>
+                    @item.Password
+                </td>
+                <td>
+                    <form asp-controller="admin" asp-action="DeleteUser" asp-antiforgery="false" method="post" asp-route-id="@item.Id">
+                        <input type="submit" value="Удалить" class="btn btn-outline-danger btn-sm" />
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

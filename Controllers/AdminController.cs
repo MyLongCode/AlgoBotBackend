@@ -26,9 +26,44 @@ namespace AlgoBotBackend.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> AllUsers()
+        {
+            var users = _db.Users.Where(c => c.Role == "user").ToList();
+            return View(users);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> CreateCourse()
         {
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CreateUser()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateUserAsync(CreateUserViewModel dto)
+        {
+            var user = new User()
+            {
+                Role = "user",
+                Login = dto.Login,
+                Password = dto.Password,
+                ReferalUsername = "",
+                FullName = dto.FullName,
+                PhoneNumber = "",
+                ChildAge = "",
+                ChildName = "",
+                Cashback = 0,
+                Score = 0,
+                StageReg = 5,
+            };
+            await _db.AddAsync(user);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("AllUsers");
         }
 
         [HttpPost]
@@ -40,6 +75,17 @@ namespace AlgoBotBackend.Controllers
             _db.Courses.Remove(course);
             _db.SaveChanges();
             return RedirectToAction("AllCourses");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteUser([FromRoute] int id)
+        {
+            if (id == null) return NotFound();
+            var user = _db.Users.Find(id);
+            if (user == null) return NotFound();
+            _db.Users.Remove(user);
+            _db.SaveChanges();
+            return RedirectToAction("AllUsers");
         }
 
         [HttpPost]

@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace AlgoBotBackend.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "admin, user")]
     public class FirmController : Controller
 	{
 		private readonly DBContext _db;
